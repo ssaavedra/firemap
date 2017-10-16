@@ -76,13 +76,13 @@ function initFirebase(map) {
 
       drawCircle(map, newPosition)
 
-      // Requests entries older than expiry time (4 * 60 minutes).
-      var expirySeconds = Math.max(60 * 4 * 60 * 1000 - elapsed, 0);
-      // Set client timeout to remove the point after a certain time.
-      window.setTimeout(function() {
-	// Delete the old point from the database.
-	snapshot.ref().remove();
-      }, expirySeconds);
+      // // Requests entries older than expiry time (4 * 60 minutes).
+      // var expirySeconds = Math.max(60 * 4 * 60 * 1000 - elapsed, 0);
+      // // Set client timeout to remove the point after a certain time.
+      // window.setTimeout(function() {
+      // 	// Delete the old point from the database.
+      // 	snapshot.ref().remove();
+      // }, expirySeconds);
     })
 
   clicks.on('child_removed', function(snapshot, prevChildKey) {
