@@ -58,8 +58,8 @@ function initAuthentication(onAuthSuccess) {
 }
 
 function initFirebase(map) {
-  // Latest hour
-  var startTime = new Date().getTime() - (60 * 60 * 1000)
+  // Latest four hours
+  var startTime = new Date().getTime() - (4 * 60 * 60 * 1000)
 
   // reference to the clicks in Firebase
   var clicks = firebase.database().ref().child('clicks')
@@ -73,8 +73,8 @@ function initFirebase(map) {
 
       drawCircle(map, newPosition)
 
-      // Requests entries older than expiry time (10 minutes).
-      var expirySeconds = Math.max(60 * 10 * 1000 - elapsed, 0);
+      // Requests entries older than expiry time (4 * 60 minutes).
+      var expirySeconds = Math.max(60 * 4 * 60 * 1000 - elapsed, 0);
       // Set client timeout to remove the point after a certain time.
       window.setTimeout(function() {
 	// Delete the old point from the database.
