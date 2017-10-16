@@ -11,7 +11,7 @@ function initMap() {
   map = L.map('map').setView([42.654, -8.808], 8)
 
   var baselayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. NASA data by LANCE FIRMS by NASA/GSFC/ESDIS with funding from NASA/HQ.'
   }).addTo(map)
 
   contributed = L.layerGroup([]).addTo(map)
@@ -30,7 +30,10 @@ function initMap() {
 
   L.control.layers(
     {"Base OSM": baselayer},
-    {"Contributed fires (last 4 hours)": contributed, "NASA reported fires": nasadata.layer},
+    {
+      "Anonymously reported fires (last 4 hours)": contributed,
+      "NASA VIIRS I Band 375m Active Fires NRT": nasadata.layer
+    },
     {
       "collapsed": false
     }).addTo(map)
