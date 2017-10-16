@@ -11,7 +11,7 @@ function initMap() {
   map = L.map('map').setView([42.654, -8.808], 8)
 
   var baselayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. NASA data by LANCE FIRMS by NASA/GSFC/ESDIS with funding from NASA/HQ.'
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. <a href="http://dx.doi.org/10.5067/FIRMS/VIIRS/VNP14IMGT.NRT.001">NASA data</a> by LANCE FIRMS by NASA/GSFC/ESDIS with funding from NASA/HQ.'
   }).addTo(map)
 
   contributed = L.layerGroup([]).addTo(map)
