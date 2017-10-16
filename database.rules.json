@@ -1,6 +1,10 @@
 {
   "rules": {
     ".read": "auth != null",
-    ".write": "auth != null && !data.exists()"
+    ".write": "auth != null",
+    "clicks": {
+      ".read": "auth != null",
+      ".write": "auth != null && !data.exists()"
+    }
   }
 }
