@@ -1,4 +1,4 @@
-var map, heat
+var map, heat, contributed, nasa
 
 var data = {
   sender: null,
@@ -6,12 +6,15 @@ var data = {
   latlng: null
 }
 
+
 function initMap() {
   map = L.map('map').setView([42.654, -8.808], 8)
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  var baselayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map)
+
+  contributed = L.layerGroup([]).addTo(map)
 
   map.on('click', function(e) {
     var popup = L.popup()
@@ -21,8 +24,16 @@ function initMap() {
   })
 
   heat = L.heatLayer([], {minOpacity: 0, radius: 50, blur: 0}).addTo(map)
+  initAuthentication(initFirebase.bind(undefined, contributed))
+  nasadata.load()
+  nasadata.layer.addTo(map)
 
-  initAuthentication(initFirebase.bind(undefined, map))
+  L.control.layers(
+    {"Base OSM": baselayer},
+    {"Contributed fires (last 4 hours)": contributed, "NASA reported fires": nasadata.layer},
+    {
+      "collapsed": false
+    }).addTo(map)
 
 }
 
@@ -60,7 +71,7 @@ function initAuthentication(onAuthSuccess) {
     })
 }
 
-function initFirebase(map) {
+function initFirebase(layer) {
   // Latest four hours
   var startTime = new Date().getTime() - (4 * 60 * 60 * 1000)
 
@@ -74,7 +85,7 @@ function initFirebase(map) {
 
       console.log("Drawing position", snapshot, newPosition)
 
-      drawCircle(map, newPosition)
+      drawCircle(layer, newPosition)
 
       // // Requests entries older than expiry time (4 * 60 minutes).
       // var expirySeconds = Math.max(60 * 4 * 60 * 1000 - elapsed, 0);
@@ -140,4 +151,37 @@ function addToFirebase(data) {
     });
   });
 }
+
+function NASAData() {
+  this.load = function() {
+    this.layer = omnivore.kml(
+      "https://firebasestorage.googleapis.com/v0/b/walk-s.appspot.com/o/VNP14IMGTDL_NRT_Europe_24h.kml?alt=media&token=7dd6b461-968f-4a2f-9789-997301eb0ac3",
+      null,
+      L.geoJSON(
+	null, {
+	  pointToLayer: function(gjp, latlng) {
+	    return L.circle(latlng, {
+	      color: 'red',
+	      fillColor: '#f03',
+	      fillOpacity: 0.5,
+	      radius: 250
+	    })
+	  },
+	  style: {
+	    color: '#e84',
+	    fillColor: '#e84',
+	    fillOpacity: 0.5,
+	    radius: 125
+	  }
+	}
+      )
+    )
+  }
+
+  this.draw = function() {
+    this.layer.addTo(map)
+  }
+}
+
+var nasadata = new NASAData()
 
