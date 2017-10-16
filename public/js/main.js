@@ -45,16 +45,19 @@ function drawCircle(map, pos) {
 }
 
 function initAuthentication(onAuthSuccess) {
-  firebase.auth().signInAnonymously().catch(function(error) {
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(function() {
+      return firebase.auth().signInAnonymously()
+    }).catch(function(error) {
     console.log("Login failed!", error)
-  }).then(function(user) {
-    if(user) {
-      data.sender = user.uid
-      onAuthSuccess()
-    } else {
-      console.log("Logout!")
-    }
-  })
+    }).then(function(user) {
+      if(user) {
+	data.sender = user.uid
+	onAuthSuccess()
+      } else {
+	console.log("Logout!")
+      }
+    })
 }
 
 function initFirebase(map) {
