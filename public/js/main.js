@@ -9,7 +9,7 @@ var data = {
 function initMap() {
   map = L.map('map').setView([42.654, -8.808], 8)
 
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map)
 
@@ -86,6 +86,7 @@ function initFirebase(map) {
     })
 
   clicks.on('child_removed', function(snapshot, prevChildKey) {
+    // TODO Implement for circles and remove the appropriate one
     var heatmapData = heatmap.getData();
     var i = 0;
     while (snapshot.val().lat != heatmapData.getAt(i).lat()
